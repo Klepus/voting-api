@@ -9,5 +9,4 @@ class MenuVotingApiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
