@@ -3,16 +3,23 @@ package com.github.klepus.menuvotingapi.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
+@Entity
+@Table(name = "dish",uniqueConstraints = {@UniqueConstraint(columnNames = {"date"}, name = "dish_unique_date_idx")})
 public class Dish extends AbstractNamedEntity {
+    @Column(name = "price")
     private BigDecimal price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    @Column(name = "date", columnDefinition = "timestamp default now()", nullable = false)
     private LocalDate date;
 
     public Dish(Integer id, String name, BigDecimal price, Restaurant restaurant, LocalDate localDate) {

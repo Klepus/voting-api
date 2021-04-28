@@ -4,17 +4,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "restaurant")
 public class Restaurant extends AbstractNamedEntity {
+    @Column(name = "telephone")
     private String telephone;
 
+    @Column(name = "address")
     private String address;
 
+    @OneToMany(
+            mappedBy = "restaurant",
+            fetch = FetchType.LAZY)
     private Set<Dish> dishes = new HashSet<>();
 
     public Restaurant(Integer id, String name) {
