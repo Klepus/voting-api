@@ -1,5 +1,6 @@
 package com.github.klepus.menuvotingapi.model;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,10 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "time", nullable = false, columnDefinition = "timestamp default current_time()")
     private LocalTime time;
 
+    @JsonProperty(value = "userId")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -29,6 +34,10 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "user_email_history")
     private String userEmail;
 
+    @JsonProperty(value = "restaurantId")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;

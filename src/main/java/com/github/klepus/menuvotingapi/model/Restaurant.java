@@ -1,5 +1,6 @@
 package com.github.klepus.menuvotingapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class Restaurant extends AbstractNamedEntity {
     @Column(name = "address")
     private String address;
 
+    @JsonIgnore
     @OneToMany(
             mappedBy = "restaurant",
             fetch = FetchType.LAZY)
