@@ -5,6 +5,8 @@ import com.github.klepus.menuvotingapi.model.Restaurant;
 import com.github.klepus.menuvotingapi.repository.*;
 import com.github.klepus.menuvotingapi.tos.*;
 import com.github.klepus.menuvotingapi.util.exception.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class AdminRestaurantController {
         this.dishRepository = dishRepository;
     }
 
+    @ApiOperation(value = "Create restaurant", authorizations = {@Authorization(value = "Basic")})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = POST_ADMIN_CREATE_RESTAURANT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestaurantTo> createRestaurant(@RequestBody @Valid RestaurantTo restaurantTo, BindingResult r) {
@@ -61,6 +64,7 @@ public class AdminRestaurantController {
         );
     }
 
+    @ApiOperation(value = "Update restaurant", authorizations = {@Authorization(value = "Basic")})
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = PUT_UPDATE_RESTAURANT_INFO, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -79,6 +83,7 @@ public class AdminRestaurantController {
         );
     }
 
+    @ApiOperation(value = "Delete restaurant", authorizations = {@Authorization(value = "Basic")})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = DELETE_RESTAURANT)
@@ -87,6 +92,7 @@ public class AdminRestaurantController {
         checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
 
+    @ApiOperation(value = "Create Menu", notes = "Create restaurants menu for today", authorizations = {@Authorization(value = "Basic")})
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = POST_ADMIN_CREATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -107,6 +113,7 @@ public class AdminRestaurantController {
         }
     }
 
+    @ApiOperation(value = "Update Menu", notes = "Update restaurants menu for today", authorizations = {@Authorization(value = "Basic")})
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = PUT_UPDATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -126,6 +133,7 @@ public class AdminRestaurantController {
         }
     }
 
+    @ApiOperation(value = "Delete menu", notes = "Delete menu for today by id", authorizations = {@Authorization(value = "Basic")})
     @Transactional
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")

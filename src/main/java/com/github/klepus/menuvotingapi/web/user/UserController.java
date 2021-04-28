@@ -11,6 +11,8 @@ import com.github.klepus.menuvotingapi.tos.VoteTo;
 import com.github.klepus.menuvotingapi.util.DateTimeUtil;
 import com.github.klepus.menuvotingapi.util.exception.NotAllowedException;
 import com.github.klepus.menuvotingapi.util.exception.NotFoundException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    @ApiOperation(value = "User votes history", authorizations = {@Authorization(value = "Basic")})
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(GET_USER_VOTES_HISTORY)
@@ -68,6 +71,7 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Vote for restaurant", authorizations = {@Authorization(value = "Basic")})
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(POST_VOTE_FOR_RESTAURANT)

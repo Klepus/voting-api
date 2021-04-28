@@ -7,6 +7,7 @@ import com.github.klepus.menuvotingapi.repository.RestaurantRepository;
 import com.github.klepus.menuvotingapi.tos.MenuTo;
 import com.github.klepus.menuvotingapi.tos.RestaurantTo;
 import com.github.klepus.menuvotingapi.util.exception.NotFoundException;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class GuestController {
         this.dishRepository = dishRepository;
     }
 
+    @ApiOperation(value = "Get restaurants list", notes = "Get all restaurants with info about them.")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(GET_RESTAURANT_LIST)
     public List<RestaurantTo> findAll() {
@@ -52,6 +54,8 @@ public class GuestController {
         }
     }
 
+    @ApiOperation(value = "Get menus list", notes = "Input startDate and endDate to get menus list of restaurants for provided dates. " +
+            "If startDate and endDate not provided, will be shown menus on today.")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(GET_MENUS_LIST)
     public Map<LocalDate, List<MenuTo>> findAllMenus(
@@ -68,6 +72,8 @@ public class GuestController {
         }
     }
 
+    @ApiOperation(value = "Get single restaurant menu", notes = "Input startDate and endDate to get restaurant menu for provided dates. " +
+            "If startDate and endDate not provided, will be shown menu on today.")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(GET_SINGLE_RESTAURANT_MENU)
     public Map<LocalDate, List<MenuTo>> getSingleRestaurantMenu(
