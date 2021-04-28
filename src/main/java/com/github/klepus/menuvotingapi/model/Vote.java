@@ -45,7 +45,7 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "restaurant_name_history")
     private String restaurantName;
 
-    public Vote(Restaurant restaurant) {
+    public Vote(User user, Restaurant restaurant) {
         super(null);
         this.date = LocalDate.now();
         this.time = LocalTime.now();
@@ -55,7 +55,7 @@ public class Vote extends AbstractBaseEntity {
         this.restaurantName = restaurant.getName();
     }
 
-    public Vote(Integer id, Restaurant restaurant, LocalDate date, LocalTime time) {
+    public Vote(Integer id, User user, Restaurant restaurant, LocalDate date, LocalTime time) {
         super(id);
         this.user = user;
         this.userEmail = user.getEmail();
