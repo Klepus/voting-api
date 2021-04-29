@@ -1,4 +1,4 @@
-package com.github.klepus.menuvotingapi;
+package com.github.klepus.menuvotingapi.web.testdata;
 
 
 import com.github.klepus.menuvotingapi.model.Role;

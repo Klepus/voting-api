@@ -10,6 +10,7 @@ import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Create restaurant", authorizations = {@Authorization(value = "Basic")})
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = POST_ADMIN_CREATE_RESTAURANT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestaurantTo> createRestaurant(@RequestBody @Valid RestaurantTo restaurantTo, BindingResult r) {
@@ -65,6 +67,7 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Update restaurant", authorizations = {@Authorization(value = "Basic")})
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = PUT_UPDATE_RESTAURANT_INFO, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -84,8 +87,9 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Delete restaurant", authorizations = {@Authorization(value = "Basic")})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = DELETE_RESTAURANT)
     public void deleteRestaurant(@PathVariable int id) {
         log.info("Delete restaurant with id={}", id);
@@ -93,6 +97,7 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Create Menu", notes = "Create restaurants menu for today", authorizations = {@Authorization(value = "Basic")})
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = POST_ADMIN_CREATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -114,6 +119,7 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Update Menu", notes = "Update restaurants menu for today", authorizations = {@Authorization(value = "Basic")})
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = PUT_UPDATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -134,9 +140,10 @@ public class AdminRestaurantController {
     }
 
     @ApiOperation(value = "Delete menu", notes = "Delete menu for today by id", authorizations = {@Authorization(value = "Basic")})
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping(value = DELETE_MENU)
     public void deleteMenu(@PathVariable Integer id) {
         log.info("Delete menu for restaurant with id={}", id);

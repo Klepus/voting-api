@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -19,9 +20,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 
-import static com.github.klepus.menuvotingapi.AllTestData.*;
-import static com.github.klepus.menuvotingapi.UserTestData.USER;
-import static com.github.klepus.menuvotingapi.UserTestData.USER_PASSWORD;
+import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.*;
+import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER;
+import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER_PASSWORD;
 import static com.github.klepus.menuvotingapi.util.DateTimeUtil.THRESHOLD_TIME;
 import static com.github.klepus.menuvotingapi.util.TestUtil.*;
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_USER_VOTES_HISTORY;
@@ -46,6 +47,7 @@ class UserControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void getVotesHistory() throws Exception {
         String actual = mockMvc.perform(get(GET_USER_VOTES_HISTORY)
                 .param("startDate", YESTERDAY_STRING)
@@ -62,6 +64,7 @@ class UserControllerTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void voteForRestaurant_Create() throws Exception {
         ResultActions perform = mockMvc.perform(post(POST_VOTE_FOR_RESTAURANT, "2")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,8 +88,9 @@ class UserControllerTest {
         assertEquals(createVoteTo(NEW_VOTE_7_U1), actual);
     }
 
-//    @Disabled("No votes in database for today, nothing update. That's why this test is ignoring.")
+    @Disabled("No votes in database for today, nothing update. That's why this test is ignoring.")
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void voteForRestaurant_Update() throws Exception {
         ResultActions perform = mockMvc.perform(post(POST_VOTE_FOR_RESTAURANT, "2")
                 .contentType(MediaType.APPLICATION_JSON)

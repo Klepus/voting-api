@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.klepus.menuvotingapi.AllTestData.createRestaurantTosList;
+import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.createRestaurantTosList;
 import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY_STRING;
 import static com.github.klepus.menuvotingapi.util.TestUtil.YESTERDAY_STRING;
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_MENUS_LIST;
@@ -48,6 +49,7 @@ class GuestControllerMockRepoTest {
     ObjectMapper objectMapper;
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAll_emptyRestaurantList() throws Exception {
         when(restaurantRepository
                 .findAll(Sort.by(Sort.Direction.ASC, "id")))
@@ -68,6 +70,7 @@ class GuestControllerMockRepoTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAllMenus() throws Exception {
         when(dishRepository
                 .getDishesBetween(any(), any()))

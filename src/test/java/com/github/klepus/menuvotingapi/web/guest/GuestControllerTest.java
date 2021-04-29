@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.*;
-import static com.github.klepus.menuvotingapi.AllTestData.*;
+import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.*;
 import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY_STRING;
 import static com.github.klepus.menuvotingapi.util.TestUtil.YESTERDAY_STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +42,7 @@ class GuestControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAll() throws Exception {
         String actual = mockMvc.perform(get(GET_RESTAURANT_LIST)
                 .accept(MediaType.APPLICATION_JSON))
@@ -55,6 +57,7 @@ class GuestControllerTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAllMenus() throws Exception {
         String actual = mockMvc.perform(get(GET_MENUS_LIST)
                 .param("startDate", YESTERDAY_STRING)
@@ -77,6 +80,7 @@ class GuestControllerTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void getSingleRestaurantMenu() throws Exception {
         int restaurantId = 1;
         String actual = mockMvc.perform(get(GET_SINGLE_RESTAURANT_MENU, restaurantId)

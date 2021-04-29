@@ -1,4 +1,4 @@
-package com.github.klepus.menuvotingapi;
+package com.github.klepus.menuvotingapi.web.testdata;
 
 import com.github.klepus.menuvotingapi.model.Dish;
 import com.github.klepus.menuvotingapi.model.Restaurant;
@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.klepus.menuvotingapi.UserTestData.USER;
+import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER;
 import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY;
 
 public final class AllTestData {

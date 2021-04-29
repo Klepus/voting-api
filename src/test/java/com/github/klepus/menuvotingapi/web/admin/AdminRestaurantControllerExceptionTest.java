@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,8 +17,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.*;
-import static com.github.klepus.menuvotingapi.AllTestData.*;
-import static com.github.klepus.menuvotingapi.UserTestData.*;
+import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.*;
+import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.*;
 import static com.github.klepus.menuvotingapi.util.TestUtil.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -57,6 +58,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void deleteRestaurant_NFE() throws Exception {
         when(restaurantRepository
                 .delete(100000))
@@ -72,6 +74,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void createMenu_menuAlreadyExist() throws Exception {
         when(dishRepository
                 .getDishesBetweenSingleRestaurant(any(), any(), any()))
@@ -89,6 +92,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void createMenu_NFE() throws Exception {
         when(dishRepository
                 .getDishesBetweenSingleRestaurant(any(), any(), any()))
@@ -110,6 +114,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void updateMenu_NFE() throws Exception {
         when(restaurantRepository
                 .getRestaurantWithDishesForToday(anyInt(), any()))
@@ -128,6 +133,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void deleteMenu_NFE() throws Exception {
         when(restaurantRepository
                 .existsById(100000))
@@ -145,6 +151,7 @@ class AdminRestaurantControllerExceptionTest {
     }
 
     @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void deleteMenu_NFE_2() throws Exception {
         when(restaurantRepository
                 .existsById(1))
