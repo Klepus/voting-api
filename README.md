@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/Klepus/voting-api.svg?branch=master)](https://travis-ci.com/Klepus/voting-api)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a963d0adac8b41d1b10b5b4f875ea81c)](https://www.codacy.com/gh/Klepus/voting-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Klepus/voting-api&amp;utm_campaign=Badge_Grade)
 
 ## Voting REST api
 Voting system for deciding where to have lunch.
