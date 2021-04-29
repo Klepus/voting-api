@@ -1,8 +1,6 @@
 package com.github.klepus.menuvotingapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,8 +8,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-@NoArgsConstructor
-@Getter
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
@@ -36,6 +32,9 @@ public class User extends AbstractNamedEntity {
     @OrderBy("date DESC, time DESC")
     private List<Vote> votes;
 
+    protected User() {
+    }
+
     public User(Integer id, String name, String email, String password, Date registered, Set<Role> roles, List<Vote> votes) {
         super(id, name);
         this.email = email;
@@ -47,6 +46,22 @@ public class User extends AbstractNamedEntity {
 
     public User(Integer id, String name, String email, String password, List<Vote> votes, Role role, Role... roles) {
         this(id, name, email, password, new Date(), EnumSet.of(role, roles), votes);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Date getRegistered() {
+        return registered;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     @Override

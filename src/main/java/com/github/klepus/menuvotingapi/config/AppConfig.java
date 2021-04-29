@@ -1,6 +1,5 @@
 package com.github.klepus.menuvotingapi.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,6 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 import java.sql.SQLException;
 
 @Configuration
-@Slf4j
 public class AppConfig {
 
 //    @Bean(initMethod = "start", destroyMethod = "stop")

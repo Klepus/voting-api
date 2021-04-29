@@ -1,17 +1,11 @@
 package com.github.klepus.menuvotingapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "restaurant")
 public class Restaurant extends AbstractNamedEntity {
@@ -27,6 +21,9 @@ public class Restaurant extends AbstractNamedEntity {
             fetch = FetchType.LAZY)
     private Set<Dish> dishes = new HashSet<>();
 
+    protected Restaurant() {
+    }
+
     public Restaurant(Integer id, String name) {
         super(id, name);
     }
@@ -40,6 +37,26 @@ public class Restaurant extends AbstractNamedEntity {
         this(id, name, dishes);
         this.telephone = telephone;
         this.address = address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Set<Dish> getDishes() {
+        return dishes;
     }
 
     @Override

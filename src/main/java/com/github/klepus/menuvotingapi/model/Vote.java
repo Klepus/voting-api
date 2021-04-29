@@ -1,15 +1,11 @@
 package com.github.klepus.menuvotingapi.model;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@NoArgsConstructor
-@Getter
 @Entity
 @Table(name = "vote", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"date", "time"}, name = "vote_uniq_date_time_idx"),
@@ -45,6 +41,9 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "restaurant_name_history")
     private String restaurantName;
 
+    protected Vote() {
+    }
+
     public Vote(User user, Restaurant restaurant) {
         super(null);
         this.date = LocalDate.now();
@@ -63,6 +62,30 @@ public class Vote extends AbstractBaseEntity {
         this.restaurantName = restaurant.getName();
         this.date = date;
         this.time = time;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
     @Override
