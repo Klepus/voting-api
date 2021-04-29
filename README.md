@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 [![Build Status](https://travis-ci.com/Klepus/voting-api.svg?branch=master)](https://travis-ci.com/Klepus/voting-api)
 
 
+=======
+>>>>>>> origin/master
 ## Voting REST api
 Voting system for deciding where to have lunch.
 
