@@ -2,6 +2,7 @@ package com.github.klepus.menuvotingapi.web.guest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.klepus.menuvotingapi.tos.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -43,6 +44,7 @@ class GuestControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @Disabled
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAll() throws Exception {
         String actual = mockMvc.perform(get(GET_ALL_RESTAURANTS)
@@ -58,6 +60,7 @@ class GuestControllerTest {
     }
 
     @Test
+    @Disabled
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAllMenus() throws Exception {
         String actual = mockMvc.perform(get(GET_ALL_CURRENT_MENUS)
