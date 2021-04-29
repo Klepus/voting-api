@@ -3,7 +3,6 @@ package com.github.klepus.menuvotingapi.web.user;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.klepus.menuvotingapi.tos.VoteTo;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,15 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collections;
 
 import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.*;
 import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER;
 import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER_PASSWORD;
-import static com.github.klepus.menuvotingapi.util.DateTimeUtil.THRESHOLD_TIME;
 import static com.github.klepus.menuvotingapi.util.TestUtil.*;
-import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_USER_VOTES_HISTORY;
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.POST_VOTE_FOR_RESTAURANT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -45,23 +40,6 @@ class UserControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Test
-    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
-    public void getVotesHistory() throws Exception {
-        String actual = mockMvc.perform(get(GET_USER_VOTES_HISTORY)
-                .param("startDate", YESTERDAY_STRING)
-                .param("endDate", TODAY_STRING)
-                .with(userHttpBasic(USER, USER_PASSWORD))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        assertEquals(objectMapper.writeValueAsString(Collections.singletonList(createVoteTo(VOTE_5_U1))), actual);
-    }
 
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
@@ -86,35 +64,5 @@ class UserControllerTest {
         ));
 
         assertEquals(createVoteTo(NEW_VOTE_7_U1), actual);
-    }
-
-    @Disabled("No votes in database for today, nothing update. That's why this test is ignoring.")
-    @Test
-    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
-    public void voteForRestaurant_Update() throws Exception {
-        ResultActions perform = mockMvc.perform(post(POST_VOTE_FOR_RESTAURANT, "2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(USER, USER_PASSWORD))
-                .content(""));
-
-        if (LocalTime.now().isBefore(THRESHOLD_TIME)) {
-            String result = perform.andExpect(status().isOk())
-                    .andDo(print())
-                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-
-            VoteTo actual = objectMapper.readValue(result, new TypeReference<>() {
-            });
-            actual.setDateTime(LocalDateTime.of(
-                    actual.getDateTime().toLocalDate(),
-                    actual.getDateTime().toLocalTime().withSecond(0).withNano(0)
-            ));
-
-            assertEquals(createVoteTo(UPD_VOTE_7_U1), actual);
-        } else {
-            perform.andExpect(status().isMethodNotAllowed()).andDo(print());
-        }
     }
 }

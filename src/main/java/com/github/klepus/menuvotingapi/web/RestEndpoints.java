@@ -4,20 +4,20 @@ public class RestEndpoints {
     private RestEndpoints() {}
     public static final String
     // All users
-    GET_RESTAURANT_LIST =            "/api/restaurants",
-    GET_MENUS_LIST =                 "/api/restaurants/menus",
-    GET_SINGLE_RESTAURANT_MENU =     "/api/restaurants/{id}",
+    GET_ALL_RESTAURANTS =                "/api/restaurants",
+    GET_ALL_CURRENT_MENUS =              "/api/restaurants/menus",
+    GET_CURRENT_RESTAURANT_MENU_BY_ID =  "/api/restaurants/{id}",
+    GET_CURRENT_VOTES =                  "/api/votes",
 
     // Authorised users
-    GET_USER_VOTES_HISTORY =         "/api/profile/votes",
-    POST_VOTE_FOR_RESTAURANT =       "/api/profile/restaurants/{id}",
+    POST_VOTE_FOR_RESTAURANT =      "/api/profile/restaurants/{id}",
 
     // Admin
-    POST_ADMIN_CREATE_RESTAURANT =   "/api/admin/restaurants",
-    POST_ADMIN_CREATE_MENU =         "/api/admin/restaurants/{id}/menu",
-    PUT_UPDATE_RESTAURANT_INFO =     "/api/admin/restaurants/{id}",
-    PUT_UPDATE_MENU =                "/api/admin/restaurants/{id}/menu",
-    DELETE_RESTAURANT =              "/api/admin/restaurants/{id}",
-    DELETE_MENU =                    "/api/admin/restaurants/{id}/menu";
+    POST_ADMIN_CREATE_RESTAURANT =    "/api/admin/restaurants",
+    POST_ADMIN_CREATE_CURRENT_MENU =  "/api/admin/restaurants/{id}/menu",
+    PUT_UPDATE_RESTAURANT_INFO =      "/api/admin/restaurants/{id}",
+    PUT_UPDATE_CURRENT_MENU =         "/api/admin/restaurants/{id}/menu",
+    DELETE_RESTAURANT =               "/api/admin/restaurants/{id}",
+    DELETE_CURRENT_MENU =             "/api/admin/restaurants/{id}/menu";
 
 }

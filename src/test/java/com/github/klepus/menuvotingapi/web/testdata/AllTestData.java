@@ -15,6 +15,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.SECOND_USER;
 import static com.github.klepus.menuvotingapi.web.testdata.UserTestData.USER;
 import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY;
 
@@ -75,8 +76,8 @@ public final class AllTestData {
     // Votes
 
     public static final Vote VOTE_5_U1 = new Vote(5, USER, RESTAURANT_1, LocalDate.now().minusDays(1), LocalTime.of(10, 0, 0));
-    public static final Vote NEW_VOTE_7_U1 = new Vote(7, USER, RESTAURANT_2, LocalDate.now(), LocalTime.now().withSecond(0).withNano(0));
-    public static final Vote UPD_VOTE_7_U1 = new Vote(7, USER, RESTAURANT_1, LocalDate.now(), LocalTime.now().withSecond(0).withNano(0));
+    public static final Vote VOTE_6_U2 = new Vote(6, USER, RESTAURANT_2, LocalDate.now().minusDays(1), LocalTime.of(10, 0, 0));
+    public static final Vote NEW_VOTE_7_U1 = new Vote(7, SECOND_USER, RESTAURANT_2, LocalDate.now(), LocalTime.now().withSecond(0).withNano(0));
 
     // Create RestaurantTo / List
 

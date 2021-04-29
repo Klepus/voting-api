@@ -52,12 +52,13 @@ VALUES (1, 'Falafel plate', 11.99, CURRENT_DATE - 3, 1),
        (23, 'Rib-eye', 49.99, CURRENT_DATE, 2),
        (24, 'Coleslaw Salad', 5.99, CURRENT_DATE, 2);
 
-INSERT INTO vote (id, date, time, user_id, user_email_history, restaurant_id, restaurant_name_history)
-VALUES (1, CURRENT_DATE - 3, '10:00:00', 1, 'user@yandex.ru', 1, 'La Maisie'),
-       (2, CURRENT_DATE - 3, '10:00:00', 3, 'seconduser@yandex.ru', 2, 'Courage Couture'),
 
-       (3, CURRENT_DATE - 2, '10:00:00', 1, 'user@yandex.ru', 3, 'Royal Palace'),
-       (4, CURRENT_DATE - 2, '10:00:00', 3, 'seconduser@yandex.ru', 1, 'La Maisie'),
+INSERT INTO vote (id, date, time, user_id, restaurant_id)
+VALUES (1, CURRENT_DATE - 3, '10:00:00', 1, 1),
+       (2, CURRENT_DATE - 3, '10:00:00', 3, 2),
 
-       (5, CURRENT_DATE - 1, '10:00:00', 1, 'user@yandex.ru', 1, 'La Maisie'),
-       (6, CURRENT_DATE - 1, '10:00:00', 3, 'seconduser@yandex.ru', 2, 'Courage Couture');
+       (3, CURRENT_DATE - 2, '10:00:00', 1, 3),
+       (4, CURRENT_DATE - 2, '10:00:00', 3, 1),
+
+       (5, CURRENT_DATE - 1, '10:00:00', 1, 1),
+       (6, CURRENT_DATE - 1, '10:00:00', 3, 2)

@@ -9,8 +9,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "vote", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"date", "time"}, name = "vote_uniq_date_time_idx"),
-        @UniqueConstraint(columnNames = {"user_email_history"}, name = "vote_uniq_user_idx"),
-        @UniqueConstraint(columnNames = {"restaurant_name_history"}, name = "vote_uniq_restaurant_idx"),
 })
 public class Vote extends AbstractBaseEntity {
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default current_date()")
@@ -27,8 +25,8 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "user_email_history")
-    private String userEmail;
+//    @Column(name = "user_email_history")
+//    private String userEmail;
 
     @JsonProperty(value = "restaurantId")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -38,8 +36,8 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    @Column(name = "restaurant_name_history")
-    private String restaurantName;
+//    @Column(name = "restaurant_name_history")
+//    private String restaurantName;
 
     protected Vote() {
     }
@@ -49,17 +47,17 @@ public class Vote extends AbstractBaseEntity {
         this.date = LocalDate.now();
         this.time = LocalTime.now();
         this.user = user;
-        this.userEmail = user.getEmail();
+//        this.userEmail = user.getEmail();
         this.restaurant = restaurant;
-        this.restaurantName = restaurant.getName();
+//        this.restaurantName = restaurant.getName();
     }
 
     public Vote(Integer id, User user, Restaurant restaurant, LocalDate date, LocalTime time) {
         super(id);
         this.user = user;
-        this.userEmail = user.getEmail();
+//        this.userEmail = user.getEmail();
         this.restaurant = restaurant;
-        this.restaurantName = restaurant.getName();
+//        this.restaurantName = restaurant.getName();
         this.date = date;
         this.time = time;
     }
@@ -80,13 +78,13 @@ public class Vote extends AbstractBaseEntity {
         return restaurant;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
+//    public String getUserEmail() {
+//        return userEmail;
+//    }
 
-    public String getRestaurantName() {
-        return restaurantName;
-    }
+//    public String getRestaurantName() {
+//        return restaurantName;
+//    }
 
     @Override
     public String toString() {

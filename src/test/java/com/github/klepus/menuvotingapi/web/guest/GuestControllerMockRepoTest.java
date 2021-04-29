@@ -5,6 +5,7 @@ import com.github.klepus.menuvotingapi.repository.DishRepository;
 import com.github.klepus.menuvotingapi.repository.RestaurantRepository;
 import com.github.klepus.menuvotingapi.repository.VoteRepository;
 import com.github.klepus.menuvotingapi.tos.RestaurantTo;
+import com.github.klepus.menuvotingapi.tos.VoteTo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,11 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.klepus.menuvotingapi.util.TestUtil.*;
+import static com.github.klepus.menuvotingapi.util.ToUtil.createTosFromVotes;
+import static com.github.klepus.menuvotingapi.web.RestEndpoints.*;
 import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.createRestaurantTosList;
-import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY_STRING;
-import static com.github.klepus.menuvotingapi.util.TestUtil.YESTERDAY_STRING;
-import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_MENUS_LIST;
-import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_RESTAURANT_LIST;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -55,7 +55,7 @@ class GuestControllerMockRepoTest {
                 .findAll(Sort.by(Sort.Direction.ASC, "id")))
                 .thenReturn(Collections.emptyList());
 
-        String actual = mockMvc.perform(get(GET_RESTAURANT_LIST)
+        String actual = mockMvc.perform(get(GET_ALL_RESTAURANTS)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -71,12 +71,33 @@ class GuestControllerMockRepoTest {
 
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
+    public void findAll_emptyVotesList() throws Exception {
+        when(voteRepository
+                .getAll(any(), any()))
+                .thenReturn(Optional.empty());
+
+        String actual = mockMvc.perform(get(GET_CURRENT_VOTES)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<VoteTo> expected = createTosFromVotes(Collections.emptyList());
+        assertEquals(objectMapper.writeValueAsString(expected), actual);
+
+        verify(voteRepository, times(1)).getAll(TODAY, TODAY);
+    }
+
+    @Test
+    @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAllMenus() throws Exception {
         when(dishRepository
                 .getDishesBetween(any(), any()))
                 .thenReturn(Optional.empty());
 
-        String actual = mockMvc.perform(get(GET_MENUS_LIST)
+        String actual = mockMvc.perform(get(GET_ALL_CURRENT_MENUS)
                 .param("startDate", YESTERDAY_STRING)
                 .param("endDate", TODAY_STRING)
                 .accept(MediaType.APPLICATION_JSON))

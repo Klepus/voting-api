@@ -18,21 +18,21 @@ public final class ToUtil {
     private ToUtil() {
     }
 
-    public static List<RestaurantTo> allRestaurantTosCreate(List<Restaurant> restaurants) {
+    public static List<RestaurantTo> createTosFromRestaurants(List<Restaurant> restaurants) {
         return restaurants.stream()
                 .map(e-> new RestaurantTo(e.getId(), e.getName(), e.getTelephone(), e.getAddress()))
                 .collect(Collectors.toList());
     }
 
-    public static Restaurant restaurantCreate(RestaurantTo restaurantTo) {
+    public static Restaurant createRestaurantFromTo(RestaurantTo restaurantTo) {
         return new Restaurant(null, restaurantTo.getName(), Collections.emptySet(), restaurantTo.getTelephone(), restaurantTo.getAddress());
     }
 
-    public static RestaurantTo restaurantToCreate(Restaurant restaurant) {
+    public static RestaurantTo createToFromRestaurant(Restaurant restaurant) {
         return new RestaurantTo(restaurant.getId(), restaurant.getName(), restaurant.getTelephone(), restaurant.getAddress());
     }
 
-    public static Map<LocalDate, List<MenuTo>> allMenuTosCreate(List<Dish> dishes) {
+    public static Map<LocalDate, List<MenuTo>> createTosFromMenus(List<Dish> dishes) {
         Set<MenuTo> menuToList = dishes.stream()
                 .map(e -> new MenuTo(e.getDate(), e.getRestaurant().getId(), e.getRestaurant().getName()))
                 .collect(Collectors.toSet());
@@ -56,19 +56,19 @@ public final class ToUtil {
                 .collect(Collectors.toSet());
     }
 
-    public static Set<Dish> dishesCreate(Set<DishTo> dishes, Restaurant restaurant) {
+    public static Set<Dish> createDishesFromTo(Set<DishTo> dishes, Restaurant restaurant) {
         return dishes.stream()
                 .map(e -> new Dish(null, e.getName(), e.getPrice(), restaurant, LocalDate.now()))
                 .collect(Collectors.toSet());
     }
 
-    public static List<VoteTo> voteTosCreate(List<Vote> votes) {
+    public static List<VoteTo> createTosFromVotes(List<Vote> votes) {
         return votes.stream()
-                .map(ToUtil::voteToCreate)
+                .map(ToUtil::createToFromVote)
                 .collect(Collectors.toList());
     }
 
-    public static VoteTo voteToCreate(Vote vote){
-        return new VoteTo(vote.getId(), LocalDateTime.of(vote.getDate(), vote.getTime()), vote.getRestaurant().getId(), vote.getRestaurantName());
+    public static VoteTo createToFromVote(Vote vote) {
+        return new VoteTo(vote.getId(), LocalDateTime.of(vote.getDate(), vote.getTime()), vote.getRestaurant().getId(), vote.getRestaurant().getName());
     }
 }

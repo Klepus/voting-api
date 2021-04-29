@@ -80,7 +80,7 @@ class AdminRestaurantControllerExceptionTest {
                 .getDishesBetweenSingleRestaurant(any(), any(), any()))
                 .thenReturn(Optional.of(Arrays.asList(DISH_15_R1, DISH_16_R1)));
 
-        mockMvc.perform(post(POST_ADMIN_CREATE_MENU, "100000")
+        mockMvc.perform(post(POST_ADMIN_CREATE_CURRENT_MENU, "100000")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null, createDishTosSet(Arrays.asList(NEW_DISH_25_R3, NEW_DISH_26_R3))))))
@@ -102,7 +102,7 @@ class AdminRestaurantControllerExceptionTest {
                 .getOne(any()))
                 .thenReturn(null);
 
-        mockMvc.perform(post(POST_ADMIN_CREATE_MENU, "100000")
+        mockMvc.perform(post(POST_ADMIN_CREATE_CURRENT_MENU, "100000")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null, createDishTosSet(Arrays.asList(NEW_DISH_25_R3, NEW_DISH_26_R3))))))
@@ -120,7 +120,7 @@ class AdminRestaurantControllerExceptionTest {
                 .getRestaurantWithDishesForToday(anyInt(), any()))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(put(PUT_UPDATE_MENU, "2")
+        mockMvc.perform(put(PUT_UPDATE_CURRENT_MENU, "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null, createDishTosSet(Arrays.asList(UPD_DISH_23_R2, UPD_DISH_24_R2))))))
@@ -139,7 +139,7 @@ class AdminRestaurantControllerExceptionTest {
                 .existsById(100000))
                 .thenReturn(false);
 
-        mockMvc.perform(delete(DELETE_MENU, "100000")
+        mockMvc.perform(delete(DELETE_CURRENT_MENU, "100000")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD)))
                 .andExpect(status().isNotFound())
@@ -161,7 +161,7 @@ class AdminRestaurantControllerExceptionTest {
                 .getRestaurantWithDishesForToday(anyInt(), any()))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(delete(DELETE_MENU, "1")
+        mockMvc.perform(delete(DELETE_CURRENT_MENU, "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD)))
                 .andExpect(status().isNotFound())

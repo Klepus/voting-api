@@ -96,9 +96,7 @@ class AdminRestaurantControllerTest {
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void createMenu() throws Exception {
-
-
-        ResultActions perform = mockMvc.perform(post(POST_ADMIN_CREATE_MENU, "3")
+        ResultActions perform = mockMvc.perform(post(POST_ADMIN_CREATE_CURRENT_MENU, "3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null,
@@ -122,7 +120,7 @@ class AdminRestaurantControllerTest {
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void updateMenu() throws Exception {
-        String actual = mockMvc.perform(put(PUT_UPDATE_MENU, "2")
+        String actual = mockMvc.perform(put(PUT_UPDATE_CURRENT_MENU, "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null,
@@ -143,7 +141,7 @@ class AdminRestaurantControllerTest {
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void deleteMenu() throws Exception {
-        mockMvc.perform(delete(DELETE_MENU, "1")
+        mockMvc.perform(delete(DELETE_CURRENT_MENU, "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD)))
                 .andExpect(status().isNoContent())

@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +27,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static com.github.klepus.menuvotingapi.util.ToUtil.voteToCreate;
-import static com.github.klepus.menuvotingapi.util.ToUtil.voteTosCreate;
-import static com.github.klepus.menuvotingapi.web.RestEndpoints.GET_USER_VOTES_HISTORY;
+import static com.github.klepus.menuvotingapi.util.ToUtil.createToFromVote;
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.POST_VOTE_FOR_RESTAURANT;
 
 @RestController
@@ -54,26 +48,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @ApiOperation(value = "User votes history", authorizations = {@Authorization(value = "Basic")})
-    @Cacheable("listOfTos")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping(GET_USER_VOTES_HISTORY)
-    public List<VoteTo> getVotesHistory(
-            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @AuthenticationPrincipal AuthorizedUser authUser) {
-        List<LocalDate> list = DateTimeUtil.checkAndInitStartDateEndDate(startDate, endDate);
-        log.info("Get votes history, user id={}", authUser.getId());
-
-        Optional<List<Vote>> findVotes = voteRepository.getAll(list.get(0), list.get(1), authUser.getId());
-        if (findVotes.isPresent()){
-            return voteTosCreate(findVotes.get());
-        }else {
-            return Collections.emptyList();
-        }
-    }
-
     @ApiOperation(value = "Vote for restaurant", authorizations = {@Authorization(value = "Basic")})
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
@@ -90,9 +64,9 @@ public class UserController {
             }
             Vote updatedVote = new Vote(user, restaurant);
             updatedVote.setId(existedVote.get().getId());
-            return new ResponseEntity<>(voteToCreate(voteRepository.save(updatedVote)), HttpStatus.OK);
+            return new ResponseEntity<>(createToFromVote(voteRepository.save(updatedVote)), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(voteToCreate(voteRepository.save(new Vote(user, restaurant))), HttpStatus.CREATED);
+            return new ResponseEntity<>(createToFromVote(voteRepository.save(new Vote(user, restaurant))), HttpStatus.CREATED);
         }
     }
 }

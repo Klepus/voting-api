@@ -54,7 +54,7 @@ public class AdminRestaurantController {
         log.info("Create restaurant with name='{}'", restaurantTo.getName());
         fieldValidation(r);
 
-        Restaurant restaurant = restaurantCreate(restaurantTo);
+        Restaurant restaurant = createRestaurantFromTo(restaurantTo);
         Restaurant created = restaurantRepository.save(restaurant);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -62,7 +62,7 @@ public class AdminRestaurantController {
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(
-                restaurantToCreate(restaurant)
+                createToFromRestaurant(restaurant)
         );
     }
 
@@ -82,7 +82,7 @@ public class AdminRestaurantController {
         if (restaurantTo.getTelephone() != null) existRestaurant.setTelephone(restaurantTo.getTelephone());
 
         return ResponseEntity.ok(
-                restaurantToCreate(restaurantRepository.save(existRestaurant))
+                createToFromRestaurant(restaurantRepository.save(existRestaurant))
         );
     }
 
@@ -100,7 +100,7 @@ public class AdminRestaurantController {
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = POST_ADMIN_CREATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = POST_ADMIN_CREATE_CURRENT_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<LocalDate, List<MenuTo>>> createMenu(@PathVariable Integer id, @RequestBody @Valid MenuTo menuTo, BindingResult r) {
         log.info("Create menu for restaurant with id={}", id);
         fieldValidation(r);
@@ -108,10 +108,10 @@ public class AdminRestaurantController {
         Optional<List<Dish>> dishesForToday = dishRepository.getDishesBetweenSingleRestaurant(LocalDate.now(), LocalDate.now(), id);
         if (dishesForToday.isEmpty()) {
             Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(id), id);
-            Set<Dish> result = dishesCreate(menuTo.getDishes(), restaurant);
+            Set<Dish> result = createDishesFromTo(menuTo.getDishes(), restaurant);
             List<Dish> dishes = dishRepository.saveAll(result);
 
-            return new ResponseEntity<>(allMenuTosCreate(dishes), HttpStatus.CREATED);
+            return new ResponseEntity<>(createTosFromMenus(dishes), HttpStatus.CREATED);
         } else {
             throw new ForbiddenException("Menu for today is persisted already. Save again not allowed. " +
                     "You can update current menu, or delete and than persist new menu.");
@@ -122,7 +122,7 @@ public class AdminRestaurantController {
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(value = PUT_UPDATE_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = PUT_UPDATE_CURRENT_MENU, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<LocalDate, List<MenuTo>>> updateMenu(@PathVariable Integer id, @RequestBody @Valid MenuTo menuTo, BindingResult r) {
         log.info("Update menu for restaurant with id={}", id);
         fieldValidation(r);
@@ -133,9 +133,9 @@ public class AdminRestaurantController {
             throw new NotFoundException("Update not allowed. Menu for today not found. You have to persist new menu.");
         } else {
             dishRepository.deleteAll(restaurant.get().getDishes());
-            Set<Dish> newMenu = dishesCreate(menuTo.getDishes(), restaurant.get());
+            Set<Dish> newMenu = createDishesFromTo(menuTo.getDishes(), restaurant.get());
 
-            return new ResponseEntity<>(allMenuTosCreate(dishRepository.saveAll(newMenu)), HttpStatus.OK);
+            return new ResponseEntity<>(createTosFromMenus(dishRepository.saveAll(newMenu)), HttpStatus.OK);
         }
     }
 
@@ -144,7 +144,7 @@ public class AdminRestaurantController {
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @DeleteMapping(value = DELETE_MENU)
+    @DeleteMapping(value = DELETE_CURRENT_MENU)
     public void deleteMenu(@PathVariable Integer id) {
         log.info("Delete menu for restaurant with id={}", id);
 

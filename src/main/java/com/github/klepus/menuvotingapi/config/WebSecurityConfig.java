@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/h2-console/**",
             "/register/**",
+            "/api/votes",
             "/api/restaurants/**"
     };
 

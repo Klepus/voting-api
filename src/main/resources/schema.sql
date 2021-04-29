@@ -51,13 +51,9 @@ CREATE TABLE vote
     date                    DATE DEFAULT current_date() NOT NULL,
     time                    TIME DEFAULT current_time() NOT NULL,
     user_id                 INTEGER,
-    user_email_history      VARCHAR(255)                NOT NULL,
     restaurant_id           INTEGER,
-    restaurant_name_history VARCHAR(255)                NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE SET NULL
 );
 CREATE UNIQUE INDEX vote_uniq_date_idx ON vote (date, user_id, restaurant_id);
-CREATE INDEX vote_user_idx ON vote (user_email_history);
-CREATE INDEX vote_restaurant_idx ON vote (restaurant_name_history);

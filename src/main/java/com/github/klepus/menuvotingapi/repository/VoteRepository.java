@@ -18,11 +18,10 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query("SELECT v FROM Vote v " +
             "JOIN FETCH v.restaurant " +
             "JOIN FETCH v.user u " +
-            "WHERE v.date >= :startDate AND v.date <= :endDate AND u.id= :userId " +
+            "WHERE v.date >= :startDate AND v.date <= :endDate " +
             "ORDER BY v.date DESC, u.id")
     Optional<List<Vote>> getAll(@Param("startDate") LocalDate startDate,
-                                @Param("endDate") LocalDate endDate,
-                                @Param("userId") Integer userId);
+                                @Param("endDate") LocalDate endDate);
 
     Optional<Vote> findByUserIdAndDate(Integer id, LocalDate date);
 }

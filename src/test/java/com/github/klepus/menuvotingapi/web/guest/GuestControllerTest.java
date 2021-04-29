@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.klepus.menuvotingapi.util.ToUtil.createTosFromVotes;
 import static com.github.klepus.menuvotingapi.web.RestEndpoints.*;
 import static com.github.klepus.menuvotingapi.web.testdata.AllTestData.*;
 import static com.github.klepus.menuvotingapi.util.TestUtil.TODAY_STRING;
@@ -44,7 +45,7 @@ class GuestControllerTest {
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAll() throws Exception {
-        String actual = mockMvc.perform(get(GET_RESTAURANT_LIST)
+        String actual = mockMvc.perform(get(GET_ALL_RESTAURANTS)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -59,7 +60,7 @@ class GuestControllerTest {
     @Test
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void findAllMenus() throws Exception {
-        String actual = mockMvc.perform(get(GET_MENUS_LIST)
+        String actual = mockMvc.perform(get(GET_ALL_CURRENT_MENUS)
                 .param("startDate", YESTERDAY_STRING)
                 .param("endDate", TODAY_STRING)
                 .accept(MediaType.APPLICATION_JSON))
@@ -83,7 +84,7 @@ class GuestControllerTest {
     @CacheEvict(cacheNames = { "listOfTos", "mapOfTos" }, allEntries = true)
     public void getSingleRestaurantMenu() throws Exception {
         int restaurantId = 1;
-        String actual = mockMvc.perform(get(GET_SINGLE_RESTAURANT_MENU, restaurantId)
+        String actual = mockMvc.perform(get(GET_CURRENT_RESTAURANT_MENU_BY_ID, restaurantId)
                 .param("id", String.valueOf(restaurantId))
                 .param("startDate", YESTERDAY_STRING)
                 .param("endDate", YESTERDAY_STRING)
@@ -95,6 +96,20 @@ class GuestControllerTest {
                 .getContentAsString();
 
         Map<LocalDate, List<MenuTo>> expected = createMenuTosMap(Arrays.asList(DISH_15_R1, DISH_16_R1));
+        assertEquals(objectMapper.writeValueAsString(expected), actual);
+    }
+
+    @Test
+    public void findAllVotes() throws Exception {
+        String actual = mockMvc.perform(get(GET_CURRENT_VOTES + "?startDate=" + YESTERDAY_STRING)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<VoteTo> expected = createTosFromVotes(Arrays.asList(VOTE_5_U1, VOTE_6_U2));
         assertEquals(objectMapper.writeValueAsString(expected), actual);
     }
 }
