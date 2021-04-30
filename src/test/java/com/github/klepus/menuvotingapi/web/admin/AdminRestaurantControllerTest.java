@@ -101,20 +101,7 @@ class AdminRestaurantControllerTest {
                 .with(userHttpBasic(ADMIN, ADMIN_PASSWORD))
                 .content(objectMapper.writeValueAsString(new MenuTo(null,null, null,
                         createDishTosSet(Arrays.asList(NEW_DISH_25_R3, NEW_DISH_26_R3))))));
-        if (LocalTime.now().isBefore(THRESHOLD_TIME)) {
-            String actual = perform
-                    .andExpect(status().isCreated())
-                    .andDo(print())
-                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-
-            assertEquals(objectMapper.writeValueAsString(createMenuTosMap(Arrays.asList(NEW_DISH_25_R3, NEW_DISH_26_R3))), actual);
-        } else {
-            perform.andExpect(status().isForbidden())
-                    .andDo(print());
-        }
+         perform.andExpect(status().isForbidden()).andDo(print());
     }
 
     @Test
